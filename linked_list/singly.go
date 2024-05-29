@@ -2,18 +2,13 @@ package linkedlist
 
 import "fmt"
 
-type Node struct {
-	data int
-	next *Node
-}
-
-type LinkedList struct {
+type SLinkedList struct {
 	head  *Node
 	tail  *Node
 	count int32
 }
 
-func (list *LinkedList) Append(value int) {
+func (list *SLinkedList) Append(value int) {
 	new_node := &Node{data: value}
 
 	if list.head == nil {
@@ -27,7 +22,7 @@ func (list *LinkedList) Append(value int) {
 	list.count++
 }
 
-func (list *LinkedList) Prepend(value int) {
+func (list *SLinkedList) Prepend(value int) {
 	new_node := &Node{data: value}
 
 	if list.tail == nil {
@@ -41,7 +36,7 @@ func (list *LinkedList) Prepend(value int) {
 	list.count++
 }
 
-func (list *LinkedList) Insert(index int, value int) {
+func (list *SLinkedList) Insert(index int, value int) {
 
 	if index >= int(list.count) || index < 0 {
 		return
@@ -54,7 +49,7 @@ func (list *LinkedList) Insert(index int, value int) {
 
 	newNode := &Node{data: value}
 
-	leader := list.traverseToIndex(index - 1)
+	leader := list.traverseToIndex(index)
 	holder := leader.next
 
 	leader.next = newNode
@@ -63,7 +58,7 @@ func (list *LinkedList) Insert(index int, value int) {
 	list.count++
 }
 
-func (list *LinkedList) Remove(index int) {
+func (list *SLinkedList) Remove(index int) {
 
 	if index >= int(list.count) || index < 0 {
 		return
@@ -90,7 +85,7 @@ func (list *LinkedList) Remove(index int) {
 	list.count--
 }
 
-func (list *LinkedList) Lookout() []int {
+func (list *SLinkedList) Lookout() []int {
 	currentNode := list.head
 
 	finalList := []int{}
@@ -102,7 +97,27 @@ func (list *LinkedList) Lookout() []int {
 	return finalList
 }
 
-func (list *LinkedList) traverseToIndex(index int) *Node {
+func (list *SLinkedList) Reverse() {
+	if list.count == 0 || list.count == 1 {
+		return
+	}
+
+	first := list.head
+	second := first.next
+
+	for second != nil {
+		tmp := second.next
+
+		second.next = first
+		first = second
+		second = tmp
+	}
+
+	list.head.next = nil
+	list.head = first
+}
+
+func (list *SLinkedList) traverseToIndex(index int) *Node {
 	currentNode := list.head
 	for i := 0; i < index-1; i++ {
 		if currentNode == nil {
@@ -113,8 +128,31 @@ func (list *LinkedList) traverseToIndex(index int) *Node {
 	return currentNode
 }
 
-func TestLinkedList() {
-	linkedList := LinkedList{}
+func TestSLinkedListReverse() {
+	linkedList := SLinkedList{}
+
+	linkedList.Prepend(1)
+	linkedList.Prepend(2)
+	linkedList.Prepend(3)
+	linkedList.Prepend(4)
+	linkedList.Prepend(5)
+	linkedList.Prepend(6)
+
+	fmt.Println("-------------------------")
+
+	fmt.Printf("%v\n", linkedList.Lookout())
+
+	linkedList.Reverse()
+
+	fmt.Printf("%v\n", linkedList.Lookout())
+
+	fmt.Println("-------------------------")
+
+
+}
+
+func TestSLinkedList() {
+	linkedList := SLinkedList{}
 
 	linkedList.Prepend(1)
 	linkedList.Prepend(2)

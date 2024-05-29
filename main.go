@@ -5,5 +5,7 @@ import (
 )
 
 func main() {
-	linkedlist.TestLinkedList()
+	// linkedlist.TestSLinkedList()
+	// linkedlist.TestDLinkedList()
+	linkedlist.TestSLinkedListReverse()
 }

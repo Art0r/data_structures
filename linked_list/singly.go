@@ -103,6 +103,7 @@ func (list *SLinkedList) Reverse() {
 	}
 
 	first := list.head
+	list.tail = list.head
 	second := first.next
 
 	for second != nil {

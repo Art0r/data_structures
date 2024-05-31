@@ -1,6 +1,5 @@
 package stack
 
-import "fmt"
 
 type Stack struct {
 	Top    *Node
@@ -35,6 +34,10 @@ func (stack *Stack) Pop() {
 }
 
 func (stack *Stack) Peek(index int) int {
+	if stack.Count == 0 {
+		return -1
+	}
+
 	node := stack.transverseStack(index)
 	return node.data
 }
@@ -62,21 +65,4 @@ func (stack *Stack) transverseStack(index int) *Node {
 	}
 
 	return currentNode
-}
-
-func Test() {
-	stack := Stack{}
-
-	stack.Push(1)
-	stack.Push(2)
-	stack.Push(3)
-	stack.Push(4)
-
-	fmt.Printf("%v\n", stack.Lookout())
-
-	stack.Pop()
-
-	fmt.Printf("%v\n", stack.Lookout())
-
-	fmt.Printf("%v\n", stack.Peek(3))
 }

@@ -1,8 +1,10 @@
 package binarysearchtree
 
+import "fmt"
+
 type Node struct {
-	data int
-	left *Node
+	data  int
+	left  *Node
 	right *Node
 }
 
@@ -36,15 +38,48 @@ func (bst *BinarySearchTree) Insert(value int) {
 			}
 			current_node = current_node.right
 		}
-		
+
 	}
 }
 
-func (bst *BinarySearchTree) Lookup(value int) {
-	// verificar se um valor existe na arvore
-	current_node := bst.root
+type LookupArgs struct {
+	currentNode *Node
+	layer int
+}
 
-	for current_node != nil {
-
+func (bst *BinarySearchTree) Lookup(value int, args *LookupArgs) {
+	if args == nil {
+		args = &LookupArgs{
+			currentNode: bst.root,
+			layer: 0,
+		}
 	}
+	
+	if args.currentNode.data == value {
+		fmt.Println("LAYER: ", args.layer)
+		fmt.Println("VALUE: ", args.currentNode.data)
+		if  args.currentNode.left != nil {
+			fmt.Println("LEFT: ", args.currentNode.left.data)
+		}
+		if  args.currentNode.right != nil {
+			fmt.Println("RIGHT: ", args.currentNode.right.data)
+		}
+		return
+	}
+
+	var goTo *Node 
+
+	if args.currentNode.data > value {
+		goTo = args.currentNode.left
+	}
+
+	if args.currentNode.data < value {
+		goTo = args.currentNode.right
+	}
+
+	bst.Lookup(value, &LookupArgs{
+		currentNode: goTo,
+		layer: args.layer + 1,
+	})
+
 }

@@ -17,5 +17,19 @@ func TestBst(t *testing.T) {
 	bst.Insert(10)
 	bst.Insert(11)
 
+	/*
+	     9
+		 /\
+		/  \
+	   5   10
+	  / \    \
+	 /   \	  \
+	1     6   11
+
+
+	*/
+
+	bst.Lookup(6, nil)
+
 	utils.SuccessMessage("ok")
 }

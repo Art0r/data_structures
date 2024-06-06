@@ -10,7 +10,14 @@
             "request": "launch",
             "mode": "debug",
             "program": "main.go"
-        }
+        },
+        {
+            "name": "Test BST file",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "tree/binary_search_tree/bst_test.go"
+        },
 
     ]
 }

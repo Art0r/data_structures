@@ -13,73 +13,133 @@ type BinarySearchTree struct {
 }
 
 func (bst *BinarySearchTree) Insert(value int) {
-	new_node := &Node{data: value}
+
+	newNode := &Node{data: value}
 
 	if bst.root == nil {
-		bst.root = new_node
+		bst.root = newNode
 		return
 	}
 
-	current_node := bst.root
-	for current_node != nil {
-
-		if current_node.data > value {
-			if current_node.left == nil {
-				current_node.left = new_node
+	currentNode := bst.root
+	for currentNode != nil {
+		if currentNode.data > value {
+			if currentNode.left == nil {
+				currentNode.left = newNode
 				break
 			}
-			current_node = current_node.left
+			currentNode = currentNode.left
 		}
 
-		if current_node.data <= value {
-			if current_node.right == nil {
-				current_node.right = new_node
+		if currentNode.data <= value {
+			if currentNode.right == nil {
+				currentNode.right = newNode
 				break
 			}
-			current_node = current_node.right
-		}
-
-	}
-}
-
-type LookupArgs struct {
-	currentNode *Node
-	layer int
-}
-
-func (bst *BinarySearchTree) Lookup(value int, args *LookupArgs) {
-	if args == nil {
-		args = &LookupArgs{
-			currentNode: bst.root,
-			layer: 0,
+			currentNode = currentNode.right
 		}
 	}
-	
-	if args.currentNode.data == value {
-		fmt.Println("LAYER: ", args.layer)
-		fmt.Println("VALUE: ", args.currentNode.data)
-		if  args.currentNode.left != nil {
-			fmt.Println("LEFT: ", args.currentNode.left.data)
+
+}
+
+func (bst *BinarySearchTree) Lookup(value int) *Node {
+
+	node, _ := bst.traverse(value, bst.root, nil)
+
+	return node
+}
+
+func (bst *BinarySearchTree) Remove(value int) {
+
+	currentNode, parentNode := bst.traverse(value, bst.root, nil)
+
+	if currentNode == nil || parentNode == nil {
+		return
+	}
+
+	// leaf node (no child)
+	if currentNode.left == nil && currentNode.right == nil {
+		if parentNode.left == currentNode {
+			currentNode = nil
+			parentNode.left = nil
 		}
-		if  args.currentNode.right != nil {
-			fmt.Println("RIGHT: ", args.currentNode.right.data)
+
+		if parentNode.right == currentNode {
+			currentNode = nil
+			parentNode.right = nil
 		}
 		return
 	}
 
-	var goTo *Node 
+	// parent with one child
+	if currentNode.left == nil || currentNode.right == nil {
+		if parentNode.left == currentNode {
+			parentNode.left = currentNode.left
+			currentNode.left = nil
+		}
 
-	if args.currentNode.data > value {
-		goTo = args.currentNode.left
+		if parentNode.right == currentNode {
+			parentNode.right = currentNode.right
+			currentNode.right = nil
+		}
+		return
 	}
 
-	if args.currentNode.data < value {
-		goTo = args.currentNode.right
+	// parent with two childs
+	// TODO stills cases to cover for this condition
+	nodeToReplace := currentNode.right
+
+	for {
+		if nodeToReplace.left == nil {
+			break
+		}
+		nodeToReplace = nodeToReplace.left
 	}
 
-	bst.Lookup(value, &LookupArgs{
-		currentNode: goTo,
-		layer: args.layer + 1,
-	})
+	if parentNode.left == currentNode {
+		parentNode.left = nodeToReplace
+		parentNode.left.left = currentNode.left
+		currentNode.left = nil
+	}
 
+	if parentNode.right == currentNode {
+		parentNode.right = nodeToReplace
+		parentNode.right.right = currentNode.right
+		currentNode.right = nil
+	}
+}
+
+func (bst *BinarySearchTree) traverse(value int, currentNode *Node, parentNode *Node) (*Node, *Node) {
+
+	if currentNode == nil {
+		return nil, nil
+	}
+
+	if currentNode.data == value {
+		return currentNode, parentNode
+	}
+
+	if currentNode.data > value {
+		return bst.traverse(value, currentNode.left, currentNode)
+	}
+
+	if currentNode.data < value {
+		return bst.traverse(value, currentNode.right, currentNode)
+	}
+
+	return nil, nil
+}
+
+func (bst *BinarySearchTree) printInOrder(node *Node) {
+	if node != nil {
+		bst.printInOrder(node.left)
+		fmt.Printf("%d ", node.data)
+		bst.printInOrder(node.right)
+	}
+}
+
+// PrintTree prints the entire BST.
+func (bst *BinarySearchTree) PrintTree() {
+	bst.printInOrder(bst.root)
+	fmt.Println()
 }

@@ -1,9 +1,9 @@
 package binarysearchtree
 
 import (
+	"fmt"
 	"testing"
 
-	utils "github.com/Art0r/data_structures/utils"
 )
 
 
@@ -29,7 +29,33 @@ func TestBst(t *testing.T) {
 
 	*/
 
-	bst.Lookup(6, nil)
+	node := bst.Lookup(5)
+	if node != nil {
+		fmt.Println("VALUE: ", node.data)
+		if node.left != nil {
+			fmt.Println("LEFT: ", node.left.data)	
+		}
+		if node.right != nil {
+			fmt.Println("RIGHT: ", node.right.data)	
+		}
+	} else {
+		fmt.Println("VALUE NOT FOUND")
+	}
 
-	utils.SuccessMessage("ok")
+	fmt.Println("-------------------------------------")
+	bst.PrintTree()
+
+	bst.Remove(5)
+
+	fmt.Println("-------------------------------------")
+	bst.PrintTree()
+
+	
+	// fmt.Println("-------------------------------------")
+	// bst.PrintTree()
+
+	// bst.Remove(5)
+	
+	// fmt.Println("-------------------------------------")
+	// bst.PrintTree()
 }

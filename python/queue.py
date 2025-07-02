@@ -34,10 +34,12 @@ class Queue:
         self._front = None
         self._rear = None
 
-    def get_front(self):
+    @property
+    def front(self):
         return self._front.value
 
-    def get_rear(self):
+    @property
+    def rear(self):
         return self._rear.value
 
     def is_empty(self):
@@ -57,7 +59,6 @@ class Queue:
         if self.is_empty():
             self._rear = temp
             self._front = temp
-            self.print_queue()
             self.print_queue_with_front_and_rear()
             return
 
@@ -68,14 +69,21 @@ class Queue:
     def print_queue(self):
         current = self._front
 
+        text = ""
         while current is not None:
-            print(current.value)
+            text += "{0}".format(current.value)
+
+            if current.next is not None:
+                text += " <- "
+
             current = current.next
+
+        print(text)
 
     def print_queue_with_front_and_rear(self):
         self.print_queue()
-        print("FRONT:", self.get_front())
-        print("REAR:", self.get_rear())
+        print("FRONT:", self.front)
+        print("REAR:", self.rear)
         print("---------------------------")
 
 
